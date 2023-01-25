@@ -111,7 +111,7 @@ subplot(2,2,4)
 ### 4)Choisissez wc qui vous semble optimal. Le filtre est-il bien choisi ? Pourquoi?
 
 On a appliqué sur le signal la transmittance complexe de fréquence 500
-on peut remarqué une attenuation sur tout le signal mais elle es plus importante dans les basses fréquence.
+on peut remarqué une attenuation sur tout le signal mais elle est plus importante dans les basses fréquence.
 
 ### 5)Observez le signal y(t) obtenu
 
@@ -120,4 +120,34 @@ on peut remarqué une attenuation sur tout le signal mais elle es plus important
 
 # Dé-bruitage d'un signal sonore
 
+### 1)Proposer une méthode pour supprimer ce bruit sur le signal.
+filtrage
+### 2) Mettez-la en oeuvre
+
+<img width="1209" alt="Screenshot 2023-01-25 at 04 19 33" src="https://user-images.githubusercontent.com/87026851/214473179-43ee313f-dbde-46e0-9922-e158acdb4dd9.png">
+
+```
+        fc = 5000;
+         K =1;
+
+         H = K./(1+1i*(f/fc).^100);
+         Hpass=[H(1:floor(N/2)),flip(H(1:floor(N/2)))];
+
+
+        y_filtre = spectre_music(1:end-1).*Hpass;
+        sig_filtred= ifft(y_filtre,"symmetric");
+        plot(fshift(1:end-1),fftshift(abs(fft(sig_filtred))))
+        legend("spectre du signal aprés filtrage"); 
+        xlabel("f");
+        ylabel("A");
+        
+```
+### 3) Quelles remarques pouvez-vous faire notamment sur la sonorité du signal final.
+
+le filtre analogique ne fait que diminué le bruit et comme on a vu présedement lors de l'attenuation du bruit dans I autre signal on arrive pas a filtrer le signal avec une transmittance complexe d'ordre 1 sans affecter le signal.
+Donc un filtre pass bas de premier ordre ne sera pas efficace pour eliminé le bruit
+
+### 4) Améliorer la qualité de filtrage en augmentant l’ordre du filtre.
+on utilise un filtre butterworth 
+<img width="561" alt="Screenshot 2023-01-25 at 04 31 35" src="https://user-images.githubusercontent.com/87026851/214474074-d5067bb7-9c9f-4624-8dcc-386653a50342.png">
 
